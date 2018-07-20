@@ -409,7 +409,8 @@ function EavesDrop:ShowFrame()
   EavesDropTab:SetAlpha(0)
 end
 
-function EavesDrop:CombatEvent(larg1, timestamp, event, hideCaster, sourceGUID, sourceName, sourceFlags, sourceFlags2, destGUID, destName, destFlags, destFlags2, ...)
+function EavesDrop:CombatEvent()
+  local timestamp, event, hideCaster, sourceGUID, sourceName, sourceFlags, sourceFlags2, destGUID, destName, destFlags, destFlags2, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12 = CombatLogGetCurrentEventInfo()
   local etype = COMBAT_EVENTS[event]
   if not etype then return end
 
@@ -419,7 +420,7 @@ function EavesDrop:CombatEvent(larg1, timestamp, event, hideCaster, sourceGUID, 
 
   --check for reflect damage
   if event == "SPELL_DAMAGE" and sourceName == destName and CombatLog_Object_IsA(destFlags, COMBATLOG_FILTER_HOSTILE) then
-    self:ParseReflect(timestamp, event, hideCaster, sourceGUID, sourceName, sourceFlags, sourceFlags2, destGUID, destName, destFlags, destFlags2, ...)
+    self:ParseReflect(timestamp, event, hideCaster, sourceGUID, sourceName, sourceFlags, sourceFlags2, destGUID, destName, destFlags, destFlags2, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12)
     return
   end
 
@@ -448,31 +449,31 @@ function EavesDrop:CombatEvent(larg1, timestamp, event, hideCaster, sourceGUID, 
   if fromPet then color = db["PETO"] end
 
   --get combat log message (for tooltip)
-  message = CombatLog_OnEvent(Blizzard_CombatLog_CurrentSettings, timestamp, event, hideCaster, sourceGUID, sourceName, sourceFlags, sourceFlags2, destGUID, destName, destFlags, destFlags2, ...)
+  message = CombatLog_OnEvent(Blizzard_CombatLog_CurrentSettings, timestamp, event, hideCaster, sourceGUID, sourceName, sourceFlags, sourceFlags2, destGUID, destName, destFlags, destFlags2, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12)
 
 
   ------------damage----------------
   if etype == "DAMAGE" then
     local intype, outtype
     if event == "SWING_DAMAGE" then
-      amount, overDamage, school, resisted, blocked, absorbed, critical, glancing, crushing = select(1, ...)
+      amount, overDamage, school, resisted, blocked, absorbed, critical, glancing, crushing = a1, a2, a3, a4, a5, a6, a7, a8, a9
       if school == SCHOOL_MASK_PHYSICAL then
         outtype, intype = "TMELEE", "PHIT"
       else
         outtype, intype = "TSPELL", "PSPELL"
       end
     elseif event == "RANGE_DAMAGE" then
-      spellId, spellName, spellSchool, amount, overDamage, school, resisted, blocked, absorbed, critical, glancing, crushing = select(1, ...)
+      spellId, spellName, spellSchool, amount, overDamage, school, resisted, blocked, absorbed, critical, glancing, crushing = a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12
       if school == SCHOOL_MASK_PHYSICAL then
         outtype, intype = "TMELEE", "PHIT"
       else
         outtype, intype = "TSPELL", "PSPELL"
       end
     elseif event == "ENVIRONMENTAL_DAMAGE" then
-      environmentalType, amount, overDamage, school, resisted, blocked, absorbed, critical, glancing, crushing = select(1, ...)
+      environmentalType, amount, overDamage, school, resisted, blocked, absorbed, critical, glancing, crushing = a1, a2, a3, a4, a5, a6, a7, a8, a9, a10
       outtype, intype = "TSPELL", "PSPELL"
     else
-      spellId, spellName, spellSchool, amount, overDamage, school, resisted, blocked, absorbed, critical, glancing, crushing = select(1, ...)
+      spellId, spellName, spellSchool, amount, overDamage, school, resisted, blocked, absorbed, critical, glancing, crushing = a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12
       texture = select(3, GetSpellInfo(spellId))
       outtype, intype = "TSPELL", "PSPELL"
     end
@@ -506,7 +507,7 @@ function EavesDrop:CombatEvent(larg1, timestamp, event, hideCaster, sourceGUID, 
     self:DisplayEvent(inout, text, texture, color, message)
   ------------buff/debuff gain----------------
   elseif etype == "BUFF" then
-    spellId, spellName, spellSchool, auraType, amount = select(1, ...)
+    spellId, spellName, spellSchool, auraType, amount = a1, a2, a3, a4, a5
     texture = select(3, GetSpellInfo(spellId))
     if toPlayer and db[auraType] then
       self:DisplayEvent(INCOMING, self:ShortenString(spellName), texture, db["P"..auraType], message)
@@ -514,7 +515,7 @@ function EavesDrop:CombatEvent(larg1, timestamp, event, hideCaster, sourceGUID, 
     end
   ------------buff/debuff lose----------------
   elseif etype == "FADE" then
-    spellId, spellName, spellSchool, auraType, amount = select(1, ...)
+    spellId, spellName, spellSchool, auraType, amount = a1, a2, a3, a4, a5
     texture = select(3, GetSpellInfo(spellId))
     if toPlayer and db[auraType.."FADE"] then
       self:DisplayEvent(INCOMING, self:ShortenString(spellName).." "..L["Fades"], texture, db["P"..auraType], message)
@@ -522,7 +523,7 @@ function EavesDrop:CombatEvent(larg1, timestamp, event, hideCaster, sourceGUID, 
     end
   ------------heals----------------
   elseif etype == "HEAL" then
-    spellId, spellName, spellSchool, amount, overHeal, absorbed, critical = select(1, ...)
+    spellId, spellName, spellSchool, amount, overHeal, absorbed, critical = a1, a2, a3, a4, a5, a6, a7
     text = tostring(shortenValue(amount))
     texture = select(3, GetSpellInfo(spellId))
 
@@ -554,10 +555,10 @@ function EavesDrop:CombatEvent(larg1, timestamp, event, hideCaster, sourceGUID, 
   elseif etype == "MISS" then
     local tcolor
     if event == "SWING_MISSED" or event == "RANGE_MISSED" then
-      missType = select(1, ...)
+      missType = a1
       tcolor = "TMELEE"
     else
-      spellId, spellName, spellSchool, missType = select(1, ...)
+      spellId, spellName, spellSchool, missType = a1, a2, a3, a4
       texture = select(3, GetSpellInfo(spellId))
       tcolor = "TSPELL"
     end
@@ -574,7 +575,7 @@ function EavesDrop:CombatEvent(larg1, timestamp, event, hideCaster, sourceGUID, 
   ------------leech and drains----------------
   elseif etype == "DRAIN" then
     if (db["GAINS"]) then
-      spellId, spellName, spellSchool, amount, powerType, extraAmount = select(1, ...)
+      spellId, spellName, spellSchool, amount, powerType, extraAmount = a1, a2, a3, a4, a5, a6
       texture = select(3, GetSpellInfo(spellId))
       if toPlayer then
         text = string_format("-%d %s", amount, string_nil(POWER_STRINGS[powerType]))
@@ -594,7 +595,7 @@ function EavesDrop:CombatEvent(larg1, timestamp, event, hideCaster, sourceGUID, 
   ------------power gains----------------
   elseif etype == "POWER" then
     if (db["GAINS"]) then
-      spellId, spellName, spellSchool, amount, powerType = select(1, ...)
+      spellId, spellName, spellSchool, amount, powerType = a1, a2, a3, a4, a5
       texture = select(3, GetSpellInfo(spellId))
       if toPlayer then
         if (amount < db["MFILTER"]) then return end
@@ -614,10 +615,10 @@ function EavesDrop:CombatEvent(larg1, timestamp, event, hideCaster, sourceGUID, 
     end
   ------------enchants----------------
   elseif etype == "ENCHANT_APPLIED" then
-    spellName = select(1, ...)
+    spellName = a1
     self:DisplayEvent(INCOMING, self:ShortenString(spellName), texture, db["PBUFF"], message)
   elseif etype == "ENCHANT_REMOVED" then
-    spellName = select(1, ...)
+    spellName = a1
     self:DisplayEvent(INCOMING, self:ShortenString(spellName).." "..L["Fades"], texture, db["PBUFF"], message)
   -------------anything else-------------
   --else
@@ -973,7 +974,7 @@ end
 -------------------------
 --Set last reflection
 function EavesDrop:ParseReflect(timestamp, event, hideCaster, sourceGUID, sourceName, sourceFlags, sourceFlags2, destGUID, destName, destFlags, destFlags2, ...)
-  local spellId, spellName, spellSchool, amount, school, resisted, blocked, absorbed, critical, glancing, crushing = select(1, ...)
+  local spellId, spellName, spellSchool, amount, school, resisted, blocked, absorbed, critical, glancing, crushing = ...
   local texture = select(3, GetSpellInfo(spellId))
   local text = amount
   local messsage = CombatLog_OnEvent(Blizzard_CombatLog_CurrentSettings, timestamp, event, hideCaster, sourceGUID, sourceName, sourceFlags, sourceFlags2, destGUID, destName, destFlags, destFlags2, ...)
