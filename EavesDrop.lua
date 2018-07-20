@@ -578,16 +578,16 @@ function EavesDrop:CombatEvent()
       spellId, spellName, spellSchool, amount, powerType, extraAmount = a1, a2, a3, a4, a5, a6
       texture = select(3, GetSpellInfo(spellId))
       if toPlayer then
-        text = string_format("-%d %s", amount, string_nil("x"))
+        text = string_format("-%d %s", amount, string_nil(""))
         color = db["PGAIN"]
       elseif fromPlayer and extraAmount then
         if (extraAmount < db["MFILTER"]) then return end
-        text = string_format("+%d %s", extraAmount, string_nil("x"))
+        text = string_format("+%d %s", extraAmount, string_nil(""))
         color = db["PGAIN"]
       elseif fromPlayer then
         return
         --for showing your drain damage
-        --text = string_format("%d %s", amount, string_nil("x"))
+        --text = string_format("%d %s", amount, string_nil(""))
         --color = db["TSPELL"]
       end
       self:DisplayEvent(inout, text, texture, color, message)
@@ -603,7 +603,7 @@ function EavesDrop:CombatEvent()
       elseif not toPet then
         return
       end
-      text = string_format("+%d %s", amount, string_nil("x"))
+      text = string_format("+%d %s", amount, string_nil(""))
       self:DisplayEvent(inout, text, texture, color, message)
     end
   ------------deaths----------------
