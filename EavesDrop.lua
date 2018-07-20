@@ -114,7 +114,7 @@ local SCHOOL_STRINGS = {
   [SCHOOL_MASK_ARCANE] = SPELL_SCHOOL6_CAP,
 }
 
-local POWER_STRINGS = {
+--[[local POWER_STRINGS = {
   [SPELL_POWER_MANA] = MANA,
   [SPELL_POWER_RAGE] = RAGE,
   [SPELL_POWER_FOCUS] = FOCUS,
@@ -133,7 +133,7 @@ local POWER_STRINGS = {
   [SPELL_POWER_ARCANE_CHARGES] = ARCANE_CHARGES_POWER,
   [SPELL_POWER_FURY] = FURY,
   [SPELL_POWER_PAIN] = PAIN,
-}
+}]]
 
 --set table default size sense table.insert no longer does
 for i=1, arrMaxSize do
@@ -578,16 +578,16 @@ function EavesDrop:CombatEvent()
       spellId, spellName, spellSchool, amount, powerType, extraAmount = a1, a2, a3, a4, a5, a6
       texture = select(3, GetSpellInfo(spellId))
       if toPlayer then
-        text = string_format("-%d %s", amount, string_nil(POWER_STRINGS[powerType]))
+        text = string_format("-%d %s", amount, string_nil("x"))
         color = db["PGAIN"]
       elseif fromPlayer and extraAmount then
         if (extraAmount < db["MFILTER"]) then return end
-        text = string_format("+%d %s", extraAmount, string_nil(POWER_STRINGS[powerType]))
+        text = string_format("+%d %s", extraAmount, string_nil("x"))
         color = db["PGAIN"]
       elseif fromPlayer then
         return
         --for showing your drain damage
-        --text = string_format("%d %s", amount, string_nil(POWER_STRINGS[powerType]))
+        --text = string_format("%d %s", amount, string_nil("x"))
         --color = db["TSPELL"]
       end
       self:DisplayEvent(inout, text, texture, color, message)
@@ -603,7 +603,7 @@ function EavesDrop:CombatEvent()
       elseif not toPet then
         return
       end
-      text = string_format("+%d %s", amount, string_nil(POWER_STRINGS[powerType]))
+      text = string_format("+%d %s", amount, string_nil("x"))
       self:DisplayEvent(inout, text, texture, color, message)
     end
   ------------deaths----------------
