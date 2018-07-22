@@ -637,6 +637,10 @@ end
 function EavesDrop:COMBAT_TEXT_UPDATE(event, larg1, larg2, larg3)
   if larg1=="FACTION" then
     local sign = "+"
+	if larg3 == nil then 
+		larg3 = 0
+		sign = ""
+	end
     if (tonumber(larg3) < 0) then sign = "" end
     self:DisplayEvent(MISC, string_format("%s%d (%s)", sign, larg3, larg2), nil, db["REPC"], nil)
   elseif larg1=="HONOR_GAINED" then
