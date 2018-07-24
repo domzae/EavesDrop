@@ -637,6 +637,9 @@ end
 function EavesDrop:COMBAT_TEXT_UPDATE(event, larg1, larg2, larg3)
   if larg1=="FACTION" then
     local sign = "+"
+	if larg2 == nil then 
+		larg2 = 0
+	end
 	if larg3 == nil then 
 		larg3 = 0
 		sign = ""
