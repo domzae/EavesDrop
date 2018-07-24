@@ -1,4 +1,4 @@
-8.0.1 fix: download clicking "Clone or download" > Download ZIP
+8.0.1 fix: download by clicking "Clone or download" > Download ZIP
               alternatively just copy/paste from EavesDrop.lua over your own version
     ***power gains won't display the type of power in the window***
 
