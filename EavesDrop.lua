@@ -162,18 +162,18 @@ local function round(num, idp)
 end
 
 local function cleanstring(s)
- --[[ s = gsub(s, "|r", "")
+  s = gsub(s, "|r", "")
   s = gsub(s, "|c........", "")
-  s = gsub(s, "|Hunit:..................:([%w%s*%-*]*)|h", "")
+  s = gsub(s, "|Hunit:%a+%-[^|]+|h", "")
   s = gsub(s, "|Haction:([%w_*]*)|h", "")
   s = gsub(s, "|Hitem:(%d+)|h", "")
   s = gsub(s, "|Hicon:%d+:dest|h", "")
   s = gsub(s, "|Hicon:%d+:source|h", "")
-  s = gsub(s, "|Hspell:%d+:([%w_*]*)|h", "")
+  s = gsub(s, "|Hspell:%d+:%d+:([%w_*]*)|h", "")
   s = gsub(s, "|TInterface.TargetingFrame.UI.RaidTargetingIcon.%d.blp:0|t", "")
   s = gsub(s, "|h", "")
   s = gsub(s, "\n", ", ")
-  s = gsub(s, "\124", "\124\124")]]
+  s = gsub(s, "\124", "\124\124")
    s=s:gsub("[\r\n]+"," ")
   return s
 end
