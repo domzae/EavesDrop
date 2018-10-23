@@ -511,7 +511,7 @@ function EavesDrop:CombatEvent()
     spellId, spellName, spellSchool, auraType, amount = a1, a2, a3, a4, a5
     texture = select(3, GetSpellInfo(spellId))
     if toPlayer and db[auraType] then
-      self:DisplayEvent(INCOMING, self:ShortenString(spellName), texture, db["P"..auraType], message, spellName)
+      self:DisplayEvent(INCOMING, self:ShortenString(spellName).." "..L["Gained"], texture, db["P"..auraType], message, spellName)
     else return
     end
   ------------buff/debuff lose----------------
