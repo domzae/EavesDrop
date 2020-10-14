@@ -5,7 +5,7 @@
   <Font name="EavesDropFontNormalSmall" inherits="GameFontNormalSmall" virtual="true"/>
 
 	<!-- EVENT TEMPLATE -->
-	<Frame name="EavesDropEventTemplate" virtual="true">
+	<Frame name="EavesDropEventTemplate" virtual="true" inherits="BackdropTemplate">
 		<Size>
 			<AbsDimension x="200" y="21"/>
 		</Size>
@@ -110,7 +110,7 @@
 	</Frame>
 
 	<!-- EVENT HISTORY TEMPLATE -->
-	<Frame name="EavesDropHistoryEventTemplate" virtual="true">
+	<Frame name="EavesDropHistoryEventTemplate" virtual="true" inherits="BackdropTemplate">
 		<Size>
 			<AbsDimension x="200" y="20" />
 		</Size>
@@ -202,7 +202,7 @@
 	</Button>
 
 	<!-- MAIN FRAME -->
-	<Frame name="EavesDropFrame" enableMouse="true" movable="true" frameStrata="LOW" parent="UIParent">
+	<Frame name="EavesDropFrame" enableMouse="true" movable="true" frameStrata="LOW" parent="UIParent" inherits="BackdropTemplate">
 		<Backdrop bgFile="Interface\ChatFrame\ChatFrameBackground" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
 			<EdgeSize>
 				<AbsValue val="16"/>
@@ -606,7 +606,7 @@
 	</Button>
 
 	<!-- HISTORY FRAME -->
-	<Frame name="EavesDropHistoryFrame" enableMouse="true" movable="true" frameStrata="LOW" clampedToScreen="true" parent="UIParent" hidden="true">
+	<Frame name="EavesDropHistoryFrame" enableMouse="true" movable="true" frameStrata="LOW" clampedToScreen="true" parent="UIParent" hidden="true" inherits="BackdropTemplate">
 		<Backdrop bgFile="Interface\ChatFrame\ChatFrameBackground" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
 			<EdgeSize>
 				<AbsValue val="16"/>
