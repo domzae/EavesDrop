@@ -392,7 +392,7 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						PlaySound("igChatScrollDown");
+						PlaySound(SOUNDKIT.IG_CHAT_SCROLL_DOWN);
 						if IsShiftKeyDown() then
 		            EavesDrop:ScrollToBottom()
 		        elseif IsControlKeyDown() then
@@ -429,7 +429,7 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-							PlaySound("igChatScrollUp");
+							PlaySound(SOUNDKIT.IG_CHAT_SCROLL_UP);
 							if IsShiftKeyDown() then
 			            EavesDrop:ScrollToTop()
 			        elseif IsControlKeyDown() then
@@ -782,7 +782,7 @@
 				<Scripts>
 					<OnClick>
 						EavesDrop:SetDisplay(1, "hit")
-						PlaySound("igMainMenuOptionCheckBoxOn");
+						PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON);
 					</OnClick>
 				</Scripts>
 			</Button>
@@ -795,7 +795,7 @@
 				<Scripts>
 					<OnClick>
 						EavesDrop:SetDisplay(1, "heal")
-						PlaySound("igMainMenuOptionCheckBoxOn");
+						PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON);
 					</OnClick>
 				</Scripts>
 			</Button>
@@ -808,7 +808,7 @@
 				<Scripts>
 					<OnClick>
 						EavesDrop:SetDisplay(-1, "hit")
-						PlaySound("igMainMenuOptionCheckBoxOn");
+						PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON);
 					</OnClick>
 				</Scripts>
 			</Button>
@@ -821,7 +821,7 @@
 				<Scripts>
 					<OnClick>
 						EavesDrop:SetDisplay(-1, "heal");
-						PlaySound("igMainMenuOptionCheckBoxOn");
+						PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON);
 					</OnClick>
 				</Scripts>
 			</Button>
