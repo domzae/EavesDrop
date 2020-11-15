@@ -505,13 +505,13 @@ function EavesDrop:CombatEvent()
     elseif toPet then
       text = "-"..text
     end
-    self:DisplayEvent(inout, text, texture, color, message)
+    self:DisplayEvent(inout, text, texture, color, message, spellName)
   ------------buff/debuff gain----------------
   elseif etype == "BUFF" then
     spellId, spellName, spellSchool, auraType, amount = a1, a2, a3, a4, a5
     texture = select(3, GetSpellInfo(spellId))
     if toPlayer and db[auraType] then
-      self:DisplayEvent(INCOMING, self:ShortenString(spellName), texture, db["P"..auraType], message)
+      self:DisplayEvent(INCOMING, self:ShortenString(spellName).." "..L["Gained"], texture, db["P"..auraType], message, spellName)
     else return
     end
   ------------buff/debuff lose----------------
@@ -519,7 +519,7 @@ function EavesDrop:CombatEvent()
     spellId, spellName, spellSchool, auraType, amount = a1, a2, a3, a4, a5
     texture = select(3, GetSpellInfo(spellId))
     if toPlayer and db[auraType.."FADE"] then
-      self:DisplayEvent(INCOMING, self:ShortenString(spellName).." "..L["Fades"], texture, db["P"..auraType], message)
+      self:DisplayEvent(INCOMING, self:ShortenString(spellName).." "..L["Fades"], texture, db["P"..auraType], message, spellName)
     else return
     end
   ------------heals----------------
@@ -551,7 +551,7 @@ function EavesDrop:CombatEvent()
       text = "+"..text
       if (db["HEALERID"] == true) then text = destName..": "..text end
     end
-    self:DisplayEvent(inout, text, texture, color, message)
+    self:DisplayEvent(inout, text, texture, color, message, spellName)
   ------------misses----------------
   elseif etype == "MISS" then
     local tcolor
@@ -572,7 +572,7 @@ function EavesDrop:CombatEvent()
       end
       color = db["PMISS"]
     end
-    self:DisplayEvent(inout, text, texture, color, message)
+    self:DisplayEvent(inout, text, texture, color, message, spellName)
   ------------leech and drains----------------
   elseif etype == "DRAIN" then
     if (db["GAINS"]) then
@@ -591,7 +591,7 @@ function EavesDrop:CombatEvent()
         --text = string_format("%d %s", amount, string_nil(""))
         --color = db["TSPELL"]
       end
-      self:DisplayEvent(inout, text, texture, color, message)
+      self:DisplayEvent(inout, text, texture, color, message, spellName)
     end
   ------------power gains----------------
   elseif etype == "POWER" then
@@ -605,22 +605,22 @@ function EavesDrop:CombatEvent()
         return
       end
       text = string_format("+%d %s", amount, string_nil(""))
-      self:DisplayEvent(inout, text, texture, color, message)
+      self:DisplayEvent(inout, text, texture, color, message, spellName)
     end
   ------------deaths----------------
   elseif etype == "DEATH" then
     if fromPlayer then
       text = deathchar..destName..deathchar
-      self:DisplayEvent(MISC, text, texture, db["DEATH"], message)
+      self:DisplayEvent(MISC, text, texture, db["DEATH"], message, spellName)
     else return
     end
   ------------enchants----------------
   elseif etype == "ENCHANT_APPLIED" then
     spellName = a1
-    self:DisplayEvent(INCOMING, self:ShortenString(spellName), texture, db["PBUFF"], message)
+    self:DisplayEvent(INCOMING, self:ShortenString(spellName), texture, db["PBUFF"], message, spellName)
   elseif etype == "ENCHANT_REMOVED" then
     spellName = a1
-    self:DisplayEvent(INCOMING, self:ShortenString(spellName).." "..L["Fades"], texture, db["PBUFF"], message)
+    self:DisplayEvent(INCOMING, self:ShortenString(spellName).." "..L["Fades"], texture, db["PBUFF"], message, spellName)
   -------------anything else-------------
   --else
     --self:Print(event, sourceName, destName)
@@ -711,13 +711,32 @@ function EavesDrop:DisplayEvent(type, text, texture, color, message, spellname)
   pEvent.text = text
   pEvent.texture = texture
   pEvent.color = color or tempcolor
-  if spellname then
-    tooltiptext = spellname
-  end
-  if (db["TIMESTAMP"] == true) then
+
+  -- Messages probably already have a timestamp, so let's clear that up
+  if (db["TIMESTAMP"] == true and message) then
+    
+    -- Check if we have a timestamp here and remove to use our own
+    local timecutoff = string.find(message, '> ')
+
+    -- If we did, skip those two characters "> " 
+    if timecutoff then
+      message = strsub(message, timecutoff + 2)
+    end
+
+    pEvent.tooltipText = string_format('|cffffffff%s\n%s', date('%I:%M:%S'), message)
+    
+  elseif (db["TIMESTAMP"] == true and text) then
+    pEvent.tooltipText = string_format('|cffffffff%s|r\n%s', date('%I:%M:%S'), text)
+  
+  elseif (db["TIMESTAMP"] == true) then
     pEvent.tooltipText = string_format('|cffffffff%s|r\n%s', date('%I:%M:%S'), tooltiptext or '')
+  
+  elseif spellname then
+    pEvent.tooltipText = spellname
+
   else
     pEvent.tooltipText = tooltiptext
+
   end
   tinsert(arrEventData, arrMaxSize, pEvent)
   self:UpdateEvents()
@@ -991,7 +1010,7 @@ function EavesDrop:ParseReflect(timestamp, event, hideCaster, sourceGUID, source
   if (self.ReflectTarget == sourceName and sourceName == destName and self.ReflectSkill == spellName) then
     local text = string_format("%s: %d", REFLECT, shortenValue(amount))
     if (critical) then text = critchar..text..critchar end
-    self:DisplayEvent(OUTGOING, text, texture, self:SpellColor(db["TSPELL"], SCHOOL_STRINGS[school]), messsage)
+    self:DisplayEvent(OUTGOING, text, texture, self:SpellColor(db["TSPELL"], SCHOOL_STRINGS[school]), messsage, spellName)
     self:ClearReflect()
   end
 end
@@ -1048,5 +1067,5 @@ function EavesDrop:ShowHistory()
   else
     EavesDropHistoryFrame:Hide()
   end
-  PlaySound("igMainMenuOptionCheckBoxOn")
+  PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
 end
