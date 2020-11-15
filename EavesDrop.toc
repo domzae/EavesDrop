@@ -1,4 +1,4 @@
-## Interface: 80000
+## Interface: 90001
 ## Name: EavesDrop
 ## Title: EavesDrop
 ## Notes: A simple combat log that displays events similar to SCT
