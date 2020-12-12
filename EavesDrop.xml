@@ -202,7 +202,7 @@
 	</Button>
 
 	<!-- MAIN FRAME -->
-	<Frame name="EavesDropFrame" enableMouse="true" movable="true" frameStrata="LOW" parent="UIParent" inherits="BackdropTemplate">
+	<Frame name="EavesDropFrame" enableMouse="true" movable="true" frameStrata="LOW" parent="UIParent" inherits="BackdropTemplate,BackdropTemplateMixin">
 		<Backdrop bgFile="Interface\ChatFrame\ChatFrameBackground" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
 			<EdgeSize>
 				<AbsValue val="16"/>
@@ -222,21 +222,27 @@
 		</Anchors>
 		<Layers>
 			<Layer level="ARTWORK">
+			
+				<Texture name="EavesDropBackground" file="Interface\ChatFrame\ChatFrameBackground">
+					<Size>
+						<AbsDimension x="190" y="200"/>
+					</Size>
+				</Texture>
 				<Texture name="EavesDropTopBar" file="Interface\ChatFrame\ChatFrameBackground">
 					<Size>
-						<AbsDimension x="190" y="20"/>
+						<AbsDimension x="190" y="40"/>
 					</Size>
 					<Anchors>
 						<Anchor point="TOP">
 							<Offset>
-								<AbsDimension x="0" y="-5"/>
+								<AbsDimension x="0" y="0"/>
 							</Offset>
 						</Anchor>
 					</Anchors>
 				</Texture>
 				<Texture name="EavesDropBottomBar" file="Interface\ChatFrame\ChatFrameBackground">
 					<Size>
-						<AbsDimension x="190" y="20"/>
+						<AbsDimension x="190" y="40"/>
 					</Size>
 					<Anchors>
 						<Anchor point="BOTTOM">
@@ -458,6 +464,7 @@
 				EavesDrop:Scroll(self, delta);
 			</OnMouseWheel>
 			<OnEnter>
+				EavesDrop:SetBackdropColor(1,1,1,1)
 				EavesDropTab:SetAlpha(1);
 			</OnEnter>
 			<OnLeave>
@@ -520,7 +527,7 @@
 		<Scripts>
 			<OnLoad>
 				self:RegisterForDrag("LeftButton");
-				self:SetAlpha(0);
+				self:SetAlpha(1);
 			</OnLoad>
 			<OnMouseDown>
 				GameTooltip:Hide();
@@ -632,7 +639,7 @@
 			<Layer level="ARTWORK">
 				<Texture name="EavesDropHistoryTopBar" file="Interface\ChatFrame\ChatFrameBackground">
 					<Size>
-						<AbsDimension x="220" y="20"/>
+						<AbsDimension x="220" y="120"/>
 					</Size>
 					<Anchors>
 						<Anchor point="TOP">
@@ -644,7 +651,7 @@
 				</Texture>
 				<Texture name="EavesDropHistoryBottomBar" file="Interface\ChatFrame\ChatFrameBackground">
 					<Size>
-						<AbsDimension x="220" y="20"/>
+						<AbsDimension x="220" y="120"/>
 					</Size>
 					<Anchors>
 						<Anchor point="BOTTOM">

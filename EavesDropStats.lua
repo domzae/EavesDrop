@@ -188,8 +188,10 @@ function EavesDrop:SetupHistory()
   --Frame
   local r,g,b,a = db["FRAME"].r, db["FRAME"].g, db["FRAME"].b, db["FRAME"].a
   EavesDropHistoryFrame:SetBackdropColor(r, g, b, a)
-  EavesDropHistoryTopBar:SetGradientAlpha("VERTICAL", r*.1, g*.1, b*.1, 0, r*.2, g*.2, b*.2, a)
-  EavesDropHistoryBottomBar:SetGradientAlpha("VERTICAL", r*.2, g*.2, b*.2, a, r*.1, g*.1, b*.1, 0)
+
+  EavesDropHistoryTopBar:SetGradientAlpha("VERTICAL", r*.1, g*.1, b*.1, .5 * a, r*.2, g*.2, b*.2, a)
+  EavesDropHistoryBottomBar:SetGradientAlpha("VERTICAL", r*.2, g*.2, b*.2, a, r*.1, g*.1, b*.1, 0.5 * a)
+
   r,g,b,a = db["BORDER"].r, db["BORDER"].g, db["BORDER"].b, db["BORDER"].a
   EavesDropHistoryFrame:SetBackdropBorderColor(r, g, b, a)
   --position frame (have to schedule cause UI scale is still 1 for some reason during init)
