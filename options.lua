@@ -3,8 +3,8 @@ local LSM = LibStub("LibSharedMedia-3.0")
 
 local EavesDrop = EavesDrop
 
-SLASH_GLADIUSEX1 = "/eavesdrop"
-SLASH_GLADIUSEX2 = "/ed"
+SLASH_EAVESDROP_1 = "/eavesdrop"
+SLASH_EAVESDROP_2 = "/ed"
 SlashCmdList["EAVESDROP"] = function(msg)
   self.OpenMenu()
 end
