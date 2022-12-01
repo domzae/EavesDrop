@@ -174,10 +174,12 @@ function EavesDrop:SetupHistory()
   EavesDropHistoryFrameSkillText:SetText(L["Skill"])
   EavesDropHistoryFrameAmountCritText:SetText(L["Crit"])
   EavesDropHistoryFrameAmountNormalText:SetText(L["Normal"])
+
   r,g,b,a = db["LABELC"].r, db["LABELC"].g, db["LABELC"].b, db["LABELC"].a
   EavesDropHistoryFrameSkillText:SetTextColor(r,g,b,a)
   EavesDropHistoryFrameAmountCritText:SetTextColor(r,g,b,a)
   EavesDropHistoryFrameAmountNormalText:SetTextColor(r,g,b,a)
+
   --Buttons
   EavesDropHistoryFrameOutgoingHit.tooltipText = L["OutgoingDamage"]
   EavesDropHistoryFrameOutgoingHeal.tooltipText = L["OutgoingHeals"]
@@ -185,12 +187,16 @@ function EavesDrop:SetupHistory()
   EavesDropHistoryFrameIncomingHeal.tooltipText = L["IncomingHeals"]
   EavesDropHistoryButton.tooltipText = L["History"]
   EavesDropHistoryFrameResetText:SetText(L["Reset"])
-  --Frame
-  local r,g,b,a = db["FRAME"].r, db["FRAME"].g, db["FRAME"].b, db["FRAME"].a
-  EavesDropHistoryFrame:SetBackdropColor(r, g, b, a)
 
-  EavesDropHistoryTopBar:SetGradientAlpha("VERTICAL", r*.1, g*.1, b*.1, .5 * a, r*.2, g*.2, b*.2, a)
-  EavesDropHistoryBottomBar:SetGradientAlpha("VERTICAL", r*.2, g*.2, b*.2, a, r*.1, g*.1, b*.1, 0.5 * a)
+  --Frame
+  local frameColor = db["FRAME"]
+  EavesDropHistoryFrame:SetBackdropColor(frameColor.r, frameColor.g, frameColor.b, frameColor.a)
+
+  -- TODO
+  local outerColor = CreateColor(r * .1, g * .1, b * .1, 0)
+  local innerColor = CreateColor(r * .2, g * .2, b * .2, a)
+  EavesDropHistoryTopBar:SetGradient("VERTICAL", outerColor, innerColor)
+  EavesDropHistoryBottomBar:SetGradient("VERTICAL", innerColor, outerColor)
 
   r,g,b,a = db["BORDER"].r, db["BORDER"].g, db["BORDER"].b, db["BORDER"].a
   EavesDropHistoryFrame:SetBackdropBorderColor(r, g, b, a)

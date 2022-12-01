@@ -6,10 +6,11 @@
           from Andalia`s SideCombatLog and CombatChat.
 
   Notes: Code comments coming at a later time.
-  ****************************************************************]] EavesDrop =
-    LibStub("AceAddon-3.0"):NewAddon("EavesDrop", "AceEvent-3.0",
-                                     "AceConsole-3.0", "AceTimer-3.0")
-local EavesDrop = EavesDrop
+  ****************************************************************]] 
+
+EavesDrop = LibStub("AceAddon-3.0"):NewAddon("EavesDrop", "AceEvent-3.0", "AceConsole-3.0", "AceTimer-3.0")
+
+-- local EavesDrop = EavesDrop
 local db
 
 local L = LibStub("AceLocale-3.0"):GetLocale("EavesDrop", true)
@@ -105,13 +106,13 @@ local COMBAT_EVENTS = {
 }
 
 local SCHOOL_STRINGS = {
-    [SCHOOL_MASK_PHYSICAL] = SPELL_SCHOOL0_CAP,
-    [SCHOOL_MASK_HOLY] = SPELL_SCHOOL1_CAP,
-    [SCHOOL_MASK_FIRE] = SPELL_SCHOOL2_CAP,
-    [SCHOOL_MASK_NATURE] = SPELL_SCHOOL3_CAP,
-    [SCHOOL_MASK_FROST] = SPELL_SCHOOL4_CAP,
-    [SCHOOL_MASK_SHADOW] = SPELL_SCHOOL5_CAP,
-    [SCHOOL_MASK_ARCANE] = SPELL_SCHOOL6_CAP
+    [STRING_SCHOOL_PHYSICAL] = SPELL_SCHOOL0_CAP,
+    [STRING_SCHOOL_HOLY] = SPELL_SCHOOL1_CAP,
+    [STRING_SCHOOL_FIRE] = SPELL_SCHOOL2_CAP,
+    [STRING_SCHOOL_NATURE] = SPELL_SCHOOL3_CAP,
+    [STRING_SCHOOL_FROST] = SPELL_SCHOOL4_CAP,
+    [STRING_SCHOOL_SHADOW] = SPELL_SCHOOL5_CAP,
+    [STRING_SCHOOL_ARCANE] = SPELL_SCHOOL6_CAP
 }
 
 --[[local POWER_STRINGS = {
@@ -192,23 +193,18 @@ function EavesDrop:OnInitialize()
     for i = 1, arrDisplaySize do
         arrEventFrames[i] = {}
         arrEventFrames[i].frame = _G[string_format("EavesDropEvent%d", i)]
-        arrEventFrames[i].text =
-            _G[string_format("EavesDropEvent%dEventText", i)]
-        arrEventFrames[i].intexture = _G[string_format(
-                                          "EavesDropEvent%dIncomingTexture", i)]
-        arrEventFrames[i].intextureframe =
-            _G[string_format("EavesDropEvent%dIncoming", i)]
-        arrEventFrames[i].outtexture = _G[string_format(
-                                           "EavesDropEvent%dOutgoingTexture", i)]
-        arrEventFrames[i].outtextureframe =
-            _G[string_format("EavesDropEvent%dOutgoing", i)]
+        arrEventFrames[i].text =_G[string_format("EavesDropEvent%dEventText", i)]
+        arrEventFrames[i].intexture = _G[string_format("EavesDropEvent%dIncomingTexture", i)]
+        arrEventFrames[i].intextureframe = _G[string_format("EavesDropEvent%dIncoming", i)]
+        arrEventFrames[i].outtexture = _G[string_format("EavesDropEvent%dOutgoingTexture", i)]
+        arrEventFrames[i].outtextureframe = _G[string_format("EavesDropEvent%dOutgoing", i)]
     end
 
     self.db = LibStub("AceDB-3.0"):New("EavesDropDB", self:GetDefaultConfig())
     self.chardb = LibStub("AceDB-3.0"):New("EavesDropStatsDB", {
         profile = {[OUTGOING] = {}, [INCOMING] = {}}
     })
-
+    
     self:SetupOptions()
 
     -- callbacks for profile changes
@@ -344,7 +340,10 @@ function EavesDrop:PerformDisplayOptions()
 
     EavesDropBackground:SetHeight(totalh)
     EavesDropBackground:SetWidth(totalw)
-    EavesDropBackground:SetGradientAlpha("VERTICAL", r, g, b, a, r, g, b, a)
+    
+    -- TODO?
+    local frameColor = CreateColor(r, g, b, a)
+    EavesDropBackground:SetGradient("VERTICAL", frameColor, frameColor)
 
     -- BORDER CONFIG
     color = db["BORDER"]
@@ -353,11 +352,11 @@ function EavesDrop:PerformDisplayOptions()
     EavesDropTopBar:SetWidth(totalw)
     EavesDropBottomBar:SetWidth(totalw)
 
-
-    EavesDropTopBar:SetGradientAlpha("VERTICAL", r * .1, g * .1, b * .1, 0,
-                                     r * .2, g * .2, b * .2, a)
-    EavesDropBottomBar:SetGradientAlpha("VERTICAL", r * .2, g * .2, b * .2, a,
-                                        r * .1, g * .1, b * .1, 0)
+    -- TODO?
+    local outerColor = CreateColor(r * .1, g * .1, b * .1, 0)
+    local innerColor = CreateColor(r * .2, g * .2, b * .2, a)
+    EavesDropTopBar:SetGradient("VERTICAL", outerColor, innerColor)
+    EavesDropBottomBar:SetGradient("VERTICAL", innerColor, outerColor)
     
 
     EavesDropFrame:EnableMouse(not db["LOCKED"])
@@ -405,9 +404,11 @@ function EavesDrop:PerformDisplayOptions()
 end
 
 function EavesDrop:SetFonts()
-    EavesDropFontNormal:SetFont(media:Fetch("font", db["FONT"]), db["TEXTSIZE"])
-    EavesDropFontNormalSmall:SetFont(media:Fetch("font", db["FONT"]),
-                                     db["TEXTSIZE"])
+    local requestedFont = media:Fetch("font", db["FONT"])
+
+    -- -- TODO
+    -- EavesDropFontNormal:SetFont(requestedFont, db["TEXTSIZE"])
+    -- EavesDropFontNormalSmall:SetFont(requestedFont, db["TEXTSIZE"])
 end
 
 function EavesDrop:PlaceFrame()
@@ -532,8 +533,7 @@ function EavesDrop:CombatEvent()
         end
 
         if fromPlayer then
-            if (self:TrackStat(inout, "hit", spellName, texture,
-                               SCHOOL_STRINGS[school], amount, critical, message)) then
+            if (self:TrackStat(inout, "hit", spellName, texture, SCHOOL_STRINGS[school], amount, critical, message)) then
                 text = newhigh .. text .. newhigh
             end
             -- fix colors for self physical
@@ -541,8 +541,7 @@ function EavesDrop:CombatEvent()
             color = self:SpellColor(db[outtype], SCHOOL_STRINGS[school])
             totDamageOut = totDamageOut + amount
         elseif toPlayer then
-            if (self:TrackStat(inout, "hit", spellName, texture,
-                               SCHOOL_STRINGS[school], amount, critical, message)) then
+            if (self:TrackStat(inout, "hit", spellName, texture, SCHOOL_STRINGS[school], amount, critical, message)) then
                 text = newhigh .. text .. newhigh
             end
             color = self:SpellColor(db[intype], SCHOOL_STRINGS[school])
@@ -585,17 +584,14 @@ function EavesDrop:CombatEvent()
             totHealingIn = totHealingIn + amount
             if (amount < db["HFILTER"]) then return end
             if (db["OVERHEAL"]) and overHeal > 0 then
-                text = string_format("%d {%d}", shortenValue(amount - overHeal),
-                                     shortenValue(overHeal))
+                text = string_format("%d {%d}", shortenValue(amount - overHeal), shortenValue(overHeal))
             end
             if (critical) then text = critchar .. text .. critchar end
             if (db["HEALERID"] == true and not fromPlayer) then
                 text = text .. " (" .. sourceName .. ")"
             end
             color = db["PHEAL"]
-            if (self:TrackStat(inout, "heal", spellName, texture,
-                               SCHOOL_STRINGS[spellSchool], amount, critical,
-                               message)) then
+            if (self:TrackStat(inout, "heal", spellName, texture, SCHOOL_STRINGS[spellSchool], amount, critical, message)) then
                 text = newhigh .. text .. newhigh
             end
             text = "+" .. text
@@ -603,14 +599,11 @@ function EavesDrop:CombatEvent()
             totHealingOut = totHealingOut + amount
             if (amount < db["HFILTER"]) then return end
             if (db["OVERHEAL"]) and overHeal > 0 then
-                text = string_format("%d {%d}", shortenValue(amount - overHeal),
-                                     shortenValue(overHeal))
+                text = string_format("%d {%d}", shortenValue(amount - overHeal), shortenValue(overHeal))
             end
             if (critical) then text = critchar .. text .. critchar end
             color = db["THEAL"]
-            if (self:TrackStat(inout, "heal", spellName, texture,
-                               SCHOOL_STRINGS[spellSchool], amount, critical,
-                               message)) then
+            if (self:TrackStat(inout, "heal", spellName, texture, SCHOOL_STRINGS[spellSchool], amount, critical, message)) then
                 text = newhigh .. text .. newhigh
             end
             text = "+" .. text
@@ -968,7 +961,7 @@ function EavesDrop:OnUpdate()
             frame.delay = frame.delay - elapsed
             if frame.delay <= 0 then
                 frame.alpha = frame.alpha - .2
-                frame:SetAlpha(frame.alpha)
+                -- frame:SetAlpha(frame.alpha)
             end
             if (frame.alpha <= 0) then
                 frame:Hide()

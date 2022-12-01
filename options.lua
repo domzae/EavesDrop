@@ -1,7 +1,13 @@
 local L = LibStub("AceLocale-3.0"):GetLocale("EavesDrop", true)
+local LSM = LibStub("LibSharedMedia-3.0")
+
 local EavesDrop = EavesDrop
 
-local media = LibStub("LibSharedMedia-3.0")
+SLASH_GLADIUSEX1 = "/eavesdrop"
+SLASH_GLADIUSEX2 = "/ed"
+SlashCmdList["EAVESDROP"] = function(msg)
+  self.OpenMenu()
+end
 
 --common functions for options callbacks
 local function getOption(info)
@@ -26,11 +32,9 @@ local function setColorOption(info, r, g, b, a)
 end
 
 function EavesDrop:SetupOptions()
-  self.options = {
+  local options = {
     type="group",
     name = "EavesDrop",
-    childGroups = "tab",
-    plugins = {},
     args = {
       events = {
         name = L["Events"],
@@ -495,9 +499,9 @@ function EavesDrop:SetupOptions()
             type = "select",
             name = L["FFont"],
             desc = L["FFont"],
-            values = media:List('font'),
+            values = LSM:List('font'),
             get=function(info)
-              local mt = media:List('font')
+              local mt = LSM:List('font')
               for k,v in pairs(mt) do
                 if v==self.db.profile.FONT then
                   return k
@@ -505,7 +509,7 @@ function EavesDrop:SetupOptions()
               end
             end,
             set=function(info,v)
-              local mt = media:List('font')
+              local mt = LSM:List('font')
               self.db.profile.FONT = mt[v]
               self:PerformDisplayOptions()
             end,
@@ -660,11 +664,19 @@ function EavesDrop:SetupOptions()
     }
   }
 
-  self.options.plugins.profiles = { profiles = LibStub("AceDBOptions-3.0"):GetOptionsTable(self.db) }
-  LibStub("AceConfig-3.0"):RegisterOptionsTable("EavesDrop", self.options)
-  LibStub("AceConfigDialog-3.0"):AddToBlizOptions("EavesDrop", "EavesDrop")
-  self:RegisterChatCommand("ed", self.OpenMenu)
-  self:RegisterChatCommand("eavesdrop", self.OpenMenu)
+  options.args.profiles = LibStub("AceDBOptions-3.0"):GetOptionsTable(self.db)
+  
+  -- LibStub("AceConfig-3.0"):RegisterOptionsTable("EavesDrop", self.options)
+  -- LibStub("AceConfigDialog-3.0"):AddToBlizOptions("EavesDrop", "EavesDrop")
+  
+	LibStub("AceConfig-3.0"):RegisterOptionsTable("EavesDrop", options)
+
+	if not self.options then
+		LibStub("AceConfigDialog-3.0"):SetDefaultSize("EavesDrop", 860, 550)
+		LibStub("AceConfigDialog-3.0"):AddToBlizOptions("EavesDrop", "EavesDrop")
+	end
+
+  self.options = options
 end
 
 function EavesDrop:GetDefaultConfig()
@@ -742,6 +754,7 @@ function EavesDrop:GetDefaultConfig()
 end
 
 function EavesDrop:OpenMenu()
-  --LibStub("AceConfigDialog-3.0"):Open("EavesDrop")
-  InterfaceOptionsFrame_OpenToCategory("EavesDrop")
+  -- LibStub("AceConfigDialog-3.0"):Open("EavesDrop")
+  -- InterfaceOptionsFrame_OpenToCategory("EavesDrop")
+	LibStub("AceConfigDialog-3.0"):Open("EavesDrop")
 end

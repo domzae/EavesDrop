@@ -1,5 +1,4 @@
 ## Interface: 100002
-## Name: EavesDrop
 ## Title: EavesDrop
 ## Notes: A simple combat log that displays events similar to SCT
 ## Version: 10.0.02
@@ -17,11 +16,10 @@
 ## X-Curse-Repository-ID: wow/eaves-drop/mainline
 
 embeds.xml
-
+templates.xml
 locals\localization-enUS.lua
 locals\localization-koKR.lua
 locals\localization-zhCN.lua
 EavesDrop.lua
 EavesDropStats.lua
 options.lua
-EavesDrop.xml

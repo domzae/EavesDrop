@@ -2,18 +2,13 @@
 
 	<!-- Fonts -->
 	<Font name="EavesDropFontNormal" inherits="GameFontNormal" virtual="true"/>
-  <Font name="EavesDropFontNormalSmall" inherits="GameFontNormalSmall" virtual="true"/>
+  	<Font name="EavesDropFontNormalSmall" inherits="GameFontNormalSmall" virtual="true"/>
 
 	<!-- EVENT TEMPLATE -->
 	<Frame name="EavesDropEventTemplate" virtual="true" inherits="BackdropTemplate">
 		<Size>
 			<AbsDimension x="200" y="21"/>
 		</Size>
-		<Backdrop bgFile="Interface\QuestFrame\UI-QuestTitleHighlight">
-			<BackgroundInsets>
-				<AbsInset left="2" right="2" top="2" bottom="2"/>
-			</BackgroundInsets>
-		</Backdrop>
 		<Frames>
 			<!-- incoming texture -->
 			<Frame name="$parentIncoming">
@@ -114,11 +109,6 @@
 		<Size>
 			<AbsDimension x="200" y="20" />
 		</Size>
-		<Backdrop bgFile="Interface\QuestFrame\UI-QuestTitleHighlight">
-			<BackgroundInsets>
-				<AbsInset left="1" right="1" top="1" bottom="1"/>
-			</BackgroundInsets>
-		</Backdrop>
 		<Layers>
 			<Layer level="ARTWORK">
 				<Texture name="$parent_Texture">
@@ -131,7 +121,7 @@
 				</Texture>
 			</Layer>
 			<Layer level="BORDER">
-				<FontString name="$parent_Skill" inherits="EavesDropFontNormalSmall" wraponspaces="false" justifyH="LEFT" text="">
+				<FontString name="$parent_Skill" inherits="EavesDropFontNormalSmall" justifyH="LEFT" text="">
 					<Size>
 						<AbsDimension x="90" y="20"/>
 					</Size>
@@ -139,7 +129,7 @@
 						<Anchor point="TOPLEFT" relativeTo="$parent_Texture" relativePoint="TOPRIGHT"/>
 					</Anchors>
 				</FontString>
-				<FontString name="$parent_Hit" inherits="EavesDropFontNormalSmall" wraponspaces="false" justifyH="RIGHT" text="">
+				<FontString name="$parent_Hit" inherits="EavesDropFontNormalSmall" justifyH="RIGHT" text="">
 					<Size>
 						<AbsDimension x="45" y="20"/>
 					</Size>
@@ -147,7 +137,7 @@
 						<Anchor point="TOPLEFT" relativeTo="$parent_Skill" relativePoint="TOPRIGHT"/>
 					</Anchors>
 				</FontString>
-				<FontString name="$parent_Crit" inherits="EavesDropFontNormalSmall" wraponspaces="false" justifyH="RIGHT" text="">
+				<FontString name="$parent_Crit" inherits="EavesDropFontNormalSmall" justifyH="RIGHT" text="">
 					<Size>
 						<AbsDimension x="45" y="20"/>
 					</Size>
@@ -202,18 +192,7 @@
 	</Button>
 
 	<!-- MAIN FRAME -->
-	<Frame name="EavesDropFrame" enableMouse="true" movable="true" frameStrata="LOW" parent="UIParent" inherits="BackdropTemplate,BackdropTemplateMixin">
-		<Backdrop bgFile="Interface\ChatFrame\ChatFrameBackground" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
-			<EdgeSize>
-				<AbsValue val="16"/>
-			</EdgeSize>
-			<TileSize>
-				<AbsValue val="16"/>
-			</TileSize>
-			<BackgroundInsets>
-				<AbsInset left="5" right="5" top="5" bottom="5"/>
-			</BackgroundInsets>
-		</Backdrop>
+	<Frame name="EavesDropFrame" enableMouse="true" movable="true" frameStrata="LOW" parent="UIParent" inherits="BackdropTemplate">
 		<Size>
 			<AbsDimension x="200" y="260"/>
 		</Size>
@@ -222,7 +201,6 @@
 		</Anchors>
 		<Layers>
 			<Layer level="ARTWORK">
-			
 				<Texture name="EavesDropBackground" file="Interface\ChatFrame\ChatFrameBackground">
 					<Size>
 						<AbsDimension x="190" y="200"/>
@@ -464,20 +442,20 @@
 				EavesDrop:Scroll(self, delta);
 			</OnMouseWheel>
 			<OnEnter>
-				EavesDrop:SetBackdropColor(1,1,1,1)
+				EavesDropFrame:SetBackdropColor(1,1,1,1)
 				EavesDropTab:SetAlpha(1);
 			</OnEnter>
 			<OnLeave>
 				EavesDropTab:SetAlpha(0);
 			</OnLeave>
 			<OnMouseDown>
-       	if IsAltKeyDown() then
-			  	if button == "LeftButton" then
-			  		EavesDrop:OpenMenu()
-			  	elseif button == "RightButton" then
-       			EavesDrop:ShowHistory()
-       		end
-			  end
+				if IsAltKeyDown() then
+					if button == "LeftButton" then
+						EavesDrop:OpenMenu()
+					elseif button == "RightButton" then
+						EavesDrop:ShowHistory()
+					end
+			  	end
 			</OnMouseDown>
 		</Scripts>
 	</Frame>
@@ -614,17 +592,6 @@
 
 	<!-- HISTORY FRAME -->
 	<Frame name="EavesDropHistoryFrame" enableMouse="true" movable="true" frameStrata="LOW" clampedToScreen="true" parent="UIParent" hidden="true" inherits="BackdropTemplate">
-		<Backdrop bgFile="Interface\ChatFrame\ChatFrameBackground" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
-			<EdgeSize>
-				<AbsValue val="16"/>
-			</EdgeSize>
-			<TileSize>
-				<AbsValue val="16"/>
-			</TileSize>
-			<BackgroundInsets>
-				<AbsInset left="5" right="5" top="5" bottom="5"/>
-			</BackgroundInsets>
-		</Backdrop>
 		<Size>
 			<AbsDimension x="230" y="250"/>
 		</Size>
