@@ -3,6 +3,7 @@
 ## Notes: A simple combat log that displays events similar to SCT
 ## Version: 10.2.00
 ## Author: Grayhoof (Edited by Domzae, Schoolias)
+## IconTexture: Interface\AddOns\Eavesdrop\media\textures\icon.blp
 ## SavedVariables: EavesDropDB
 ## SavedVariablesPerCharacter: EavesDropStatsDB
 ## X-Website: http://github.com/vbhayden/Eavesdrop
