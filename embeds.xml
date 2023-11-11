@@ -12,5 +12,6 @@
 <Include file="libs\AceGUI-3.0\AceGUI-3.0.xml"/>
 <Include file="libs\AceConfig-3.0\AceConfig-3.0.xml"/>
 <Include file="libs\LibSharedMedia-3.0\lib.xml"/>
+<Include file="libs\LibFunctional-1.0\lib.xml"/>
 
 </Ui>
