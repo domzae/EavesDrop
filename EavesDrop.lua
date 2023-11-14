@@ -556,9 +556,13 @@ function EavesDrop:CombatEvent()
         spellId, spellName, spellSchool, auraType, amount = a1, a2, a3, a4, a5
         texture = select(3, GetSpellInfo(spellId))
         if toPlayer and db[auraType] then
-            self:DisplayEvent(INCOMING, self:ShortenString(spellName) .. " " ..
-                                  L["Gained"], texture, db["P" .. auraType],
-                              message, spellName)
+            
+            local gained = L["Gained"]
+            local entryText = self:ShortenString(spellName) .. " " .. gained
+            local hoverText = spellName .. " " .. gained
+
+            self:DisplayEvent(INCOMING, entryText, texture, db["P" .. auraType],
+                              message, hoverText)
         else
             return
         end
@@ -567,9 +571,13 @@ function EavesDrop:CombatEvent()
         spellId, spellName, spellSchool, auraType, amount = a1, a2, a3, a4, a5
         texture = select(3, GetSpellInfo(spellId))
         if toPlayer and db[auraType .. "FADE"] then
-            self:DisplayEvent(INCOMING, self:ShortenString(spellName) .. " " ..
-                                  L["Fades"], texture, db["P" .. auraType],
-                              message, spellName)
+            
+            local fades = L["Fades"]
+            local entryText = self:ShortenString(spellName) .. " " .. fades
+            local hoverText = spellName .. " " .. fades
+
+            self:DisplayEvent(INCOMING, entryText, texture, db["P" .. auraType],
+                              message, hoverText)
         else
             return
         end
@@ -794,13 +802,13 @@ function EavesDrop:CHAT_MSG_SKILL(event, larg1)
 end
 
 local tempcolor = {r = 1, g = 1, b = 1}
-function EavesDrop:DisplayEvent(type, text, texture, color, message, spellname)
+function EavesDrop:DisplayEvent(type, entryText, texture, color, message, hoverText)
     -- remove oldest table and create new display event
     local pEvent = tremove(arrEventData, 1)
     local tooltiptext = message
     if (db["FLIP"] == true) then type = type * -1 end
     pEvent.type = type
-    pEvent.text = text
+    pEvent.text = entryText
     pEvent.texture = texture
     pEvent.color = color or tempcolor
 
@@ -813,19 +821,22 @@ function EavesDrop:DisplayEvent(type, text, texture, color, message, spellname)
         -- If we did, skip those two characters "> " 
         if timecutoff then message = strsub(message, timecutoff + 2) end
 
-        pEvent.tooltipText = string_format('|cffffffff%s\n%s', date('%I:%M:%S'),
-                                           message)
+        pEvent.tooltipText = string_format('|cffffffff%s\n%s', date('%I:%M:%S'), message)
 
-    elseif (db["TIMESTAMP"] == true and text) then
+    elseif (db["TIMESTAMP"] == true and hoverText) then
         pEvent.tooltipText = string_format('|cffffffff%s|r\n%s',
-                                           date('%I:%M:%S'), text)
+                                           date('%I:%M:%S'), hoverText)
+
+    elseif (db["TIMESTAMP"] == true and entryText) then
+        pEvent.tooltipText = string_format('|cffffffff%s|r\n%s',
+                                            date('%I:%M:%S'), entryText)
 
     elseif (db["TIMESTAMP"] == true) then
         pEvent.tooltipText = string_format('|cffffffff%s|r\n%s',
                                            date('%I:%M:%S'), tooltiptext or '')
 
-    elseif spellname then
-        pEvent.tooltipText = spellname
+    elseif hoverText then
+        pEvent.tooltipText = hoverText
 
     else
         pEvent.tooltipText = tooltiptext
